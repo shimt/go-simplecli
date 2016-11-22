@@ -1,3 +1,4 @@
+// Simple CLI framework.
 package simplecli
 
 import (
@@ -35,6 +36,7 @@ type CLI struct {
 	VerboseMode bool
 }
 
+// Initialize - initalize CLI struct.
 func (c *CLI) Initialize() {
 	// DebugMode & VerboseMode
 
@@ -116,6 +118,7 @@ func (c *CLI) initPFlag() (err error) {
 	return
 }
 
+// Setup - Parse command line & read configuration file.
 func (c *CLI) Setup() (err error) {
 	c.BindSameName("debug")
 	c.BindSameName("verbose")
@@ -161,10 +164,12 @@ func (c *CLI) setupLogus() {
 	}
 }
 
+// Exit - Exit CLI application.
 func (c *CLI) Exit(code int) {
 	os.Exit(code)
 }
 
+// Exit1IfError - Exit CLI application if error.
 func (c *CLI) Exit1IfError(err error) {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -172,10 +177,12 @@ func (c *CLI) Exit1IfError(err error) {
 	}
 }
 
+// BindSameName - Bind viper & pflag parameter.
 func (c *CLI) BindSameName(name string) {
 	c.Config.BindPFlag(name, c.CommandLine.Lookup(name))
 }
 
+// NewCLI - New CLI instance.
 func NewCLI() (cli *CLI) {
 	cli = &CLI{}
 	cli.Initialize()

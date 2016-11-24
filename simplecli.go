@@ -26,7 +26,7 @@ package simplecli
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"runtime"
 
 	"github.com/Sirupsen/logrus"
@@ -71,8 +71,8 @@ func (c *CLI) Initialize() {
 
 	// Aplication.Name
 
-	name := path.Base(os.Args[0])
-	ext := path.Ext(name)
+	name := filepath.Base(os.Args[0])
+	ext := filepath.Ext(name)
 
 	if ext != "" {
 		name = name[:len(name)-len(ext)]

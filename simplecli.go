@@ -40,6 +40,7 @@ type application struct {
 
 	ProgramName string
 	Arguments   []string
+	Directory   string
 
 	OS string
 }
@@ -73,6 +74,7 @@ func (c *CLI) Initialize() {
 
 	name := filepath.Base(os.Args[0])
 	ext := filepath.Ext(name)
+	directory := filepath.Dir(os.Args[0])
 
 	if ext != "" {
 		name = name[:len(name)-len(ext)]
@@ -84,6 +86,7 @@ func (c *CLI) Initialize() {
 
 	c.Application.ProgramName = os.Args[0]
 	c.Application.Arguments = os.Args[1:]
+	c.Application.Directory = directory
 
 	// Application.OS
 	c.Application.OS = runtime.GOOS

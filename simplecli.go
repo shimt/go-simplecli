@@ -134,9 +134,9 @@ func (c *CLI) initViper() (err error) {
 func (c *CLI) initPFlag() (err error) {
 	commandLine := pflag.NewFlagSet(c.Application.ProgramName, pflag.ExitOnError)
 
-	commandLine.StringVarP(&c.ConfigFile, "config", "c", "", "config file")
+	commandLine.StringVar(&c.ConfigFile, "config", "", "config file")
 	commandLine.BoolVar(&c.DebugMode, "debug", false, "debug output")
-	commandLine.BoolVarP(&c.VerboseMode, "verbose", "v", false, "verbose output")
+	commandLine.BoolVar(&c.VerboseMode, "verbose", false, "verbose output")
 
 	c.CommandLine = commandLine
 

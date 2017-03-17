@@ -62,6 +62,57 @@ func TestApplicationArguments(t *testing.T) {
 	}
 }
 
+func TestBetweenRune(t *testing.T) {
+	var betweenRuneTests = []struct {
+		char     rune
+		lower    rune
+		upper    rune
+		expected bool
+	}{
+		{'0', '0', '9', true},
+		{'5', '0', '9', true},
+		{'9', '0', '9', true},
+		{'A', '0', '9', false},
+		{'A', 'A', 'Z', true},
+		{'M', 'A', 'Z', true},
+		{'Z', 'A', 'Z', true},
+		{'0', 'A', 'Z', false},
+	}
+
+	for _, tt := range betweenRuneTests {
+		actual := betweenRune(tt.char, tt.lower, tt.upper)
+		if actual != tt.expected {
+			t.Errorf(
+				"betweenRuneTests('%s', '%s', '%s'): expected %t, actual %t",
+				string(tt.char), string(tt.lower), string(tt.upper), tt.expected, actual)
+		}
+	}
+
+}
+
+func TestNormalizeEnvName(t *testing.T) {
+	var normalizeEnvNameTests = []struct {
+		input    string
+		expected string
+	}{
+		{"test", "TEST"},
+		{"test-test", "TEST_TEST"},
+		{"0test-test", "_TEST_TEST"},
+		{"!\"#$%&'()=-^\\", "_____________"},
+		{"あいうえお", "_____"},
+	}
+
+	for _, tt := range normalizeEnvNameTests {
+		actual := normalizeEnvName(tt.input)
+		if actual != tt.expected {
+			t.Errorf(
+				"normalizeEnvName(\"%s\"): expected %s, actual %s",
+				tt.input, tt.expected, actual)
+		}
+	}
+
+}
+
 func TestViperConfigPath(t *testing.T) {
 	// cli := NewCLI()
 

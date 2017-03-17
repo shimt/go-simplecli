@@ -28,6 +28,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/pkg/errors"
@@ -110,11 +111,33 @@ func (c *CLI) initLogrus() (err error) {
 	return
 }
 
+func betweenRune(c rune, l rune, u rune) bool {
+	return l <= c && c <= u
+}
+
+func normalizeEnvName(name string) string {
+	buf := []rune(strings.ToUpper(name))
+
+	if len(buf) > 0 {
+		for i, c := range buf {
+			if !(betweenRune(c, 'A', 'Z') || betweenRune(c, '0', '9') || c == '_') {
+				buf[i] = '_'
+			}
+		}
+
+		if betweenRune(buf[0], '0', '9') {
+			buf[0] = '_'
+		}
+	}
+
+	return string(buf)
+}
+
 func (c *CLI) initViper() (err error) {
 	config := viper.New()
 
 	config.SetConfigName("." + c.Application.Name)
-	config.SetEnvPrefix(c.Application.Name)
+	config.SetEnvPrefix(normalizeEnvName(c.Application.Name))
 
 	// config path
 

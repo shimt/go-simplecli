@@ -62,6 +62,36 @@ func TestApplicationArguments(t *testing.T) {
 	}
 }
 
+func TestAConfigSearchPath(t *testing.T) {
+	cli := NewCLI()
+
+	t.Log("cli.ConfigSearchPath:", cli.ConfigSearchPath)
+
+	csp := cli.ConfigSearchPath
+	i := 0
+
+	if csp[i] != "." {
+		t.Errorf("cli.ConfigSearchPath[%d] is not '.'", i)
+	}
+	i++
+
+	if value := os.Getenv("HOME"); value != "" {
+		t.Log("HOME:", value)
+		if csp[i] != value {
+			t.Errorf("cli.ConfigSearchPath[%d] is not '%s'", i, value)
+		}
+		i++
+	}
+
+	if value := os.Getenv("USERPROFILE"); value != "" {
+		t.Log("USERPROFILE:", value)
+		if csp[i] != value {
+			t.Errorf("cli.ConfigSearchPath[%d] is not '%s'", i, value)
+		}
+		i++
+	}
+}
+
 func TestBetweenRune(t *testing.T) {
 	var betweenRuneTests = []struct {
 		char     rune

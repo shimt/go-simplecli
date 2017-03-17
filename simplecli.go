@@ -52,8 +52,9 @@ type CLI struct {
 
 	CommandLine *pflag.FlagSet
 
-	ConfigFile string
-	Config     *viper.Viper
+	ConfigSearchPath []string
+	ConfigFile       string
+	Config           *viper.Viper
 
 	Log *logrus.Logger
 
@@ -93,6 +94,17 @@ func (c *CLI) Initialize() {
 	// Application.OS & Application.Arch
 	c.Application.OS = runtime.GOOS
 	c.Application.Arch = runtime.GOARCH
+
+	// ConfigSearchPath
+	configSearchPath := []string{"."}
+
+	for _, name := range []string{"HOME", "USERPROFILE"} {
+		if value := os.Getenv(name); value != "" {
+			configSearchPath = append(configSearchPath, value)
+		}
+	}
+
+	c.ConfigSearchPath = configSearchPath
 
 	// pflag & viper
 	c.initPFlag()
@@ -142,13 +154,8 @@ func (c *CLI) initViper() (err error) {
 	config.SetEnvPrefix(normalizeEnvName(c.Application.Name))
 
 	// config path
-
-	config.AddConfigPath(".")
-
-	for _, name := range []string{"HOME", "USERPROFILE"} {
-		if value := os.Getenv(name); value != "" {
-			config.AddConfigPath(value)
-		}
+	for _, path := range c.ConfigSearchPath {
+		config.AddConfigPath(path)
 	}
 
 	c.Config = config

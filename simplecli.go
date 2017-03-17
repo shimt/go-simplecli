@@ -178,7 +178,11 @@ func (c *CLI) initPFlag() (err error) {
 }
 
 // Setup - Parse command line & read configuration file.
-func (c *CLI) Setup() (err error) {
+func (c *CLI) Setup(setups ...func()) (err error) {
+	for _, f := range setups {
+		f()
+	}
+
 	c.BindSameName("debug")
 	c.BindSameName("verbose")
 
@@ -241,6 +245,11 @@ func (c *CLI) BindSameName(names ...string) {
 	for _, name := range names {
 		c.Config.BindPFlag(name, c.CommandLine.Lookup(name))
 	}
+}
+
+// NewCLISetting - New CLISetting instance.
+func (c *CLI) NewCLISetting() CLISetting {
+	return CLISetting{c}
 }
 
 // NewCLI - New CLI instance.

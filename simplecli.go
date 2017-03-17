@@ -43,7 +43,8 @@ type application struct {
 	Arguments   []string
 	Directory   string
 
-	OS string
+	OS   string
+	Arch string
 }
 
 type CLI struct {
@@ -89,8 +90,9 @@ func (c *CLI) Initialize() {
 	c.Application.Arguments = os.Args[1:]
 	c.Application.Directory = directory
 
-	// Application.OS
+	// Application.OS & Application.Arch
 	c.Application.OS = runtime.GOOS
+	c.Application.Arch = runtime.GOARCH
 
 	// pflag & viper
 	c.initPFlag()

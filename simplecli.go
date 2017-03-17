@@ -87,7 +87,7 @@ func (c *CLI) Initialize() {
 
 	c.Application.Name = name
 
-	// Application.ProgramName & Aplication.Arguments
+	// Application.ProgramName & Application.Arguments
 
 	c.Application.ProgramName = arg0
 	c.Application.Arguments = os.Args[1:]

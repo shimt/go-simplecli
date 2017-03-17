@@ -64,6 +64,8 @@ type CLI struct {
 
 // Initialize - initalize CLI struct.
 func (c *CLI) Initialize() {
+	arg0 := os.Args[0]
+
 	// DebugMode & VerboseMode
 
 	c.DebugMode = false
@@ -75,9 +77,9 @@ func (c *CLI) Initialize() {
 
 	// Aplication.Name
 
-	name := filepath.Base(os.Args[0])
+	name := filepath.Base(arg0)
 	ext := filepath.Ext(name)
-	directory := filepath.Dir(os.Args[0])
+	directory := filepath.Dir(arg0)
 
 	if ext != "" {
 		name = name[:len(name)-len(ext)]
@@ -87,7 +89,7 @@ func (c *CLI) Initialize() {
 
 	// Application.ProgramName & Aplication.Arguments
 
-	c.Application.ProgramName = os.Args[0]
+	c.Application.ProgramName = arg0
 	c.Application.Arguments = os.Args[1:]
 	c.Application.Directory = directory
 

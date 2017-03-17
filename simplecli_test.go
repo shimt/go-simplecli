@@ -32,8 +32,8 @@ func TestApplicationName(t *testing.T) {
 
 	cli := NewCLI()
 
-	t.Log("os.Args[0]: ", os.Args[0])
-	t.Log("cli.Application.Name: ", cli.Application.Name)
+	t.Log("os.Args[0]:", os.Args[0])
+	t.Log("cli.Application.Name:", cli.Application.Name)
 
 	if cli.Application.Name != "go-simplecli.test" {
 		t.Error("cli.Application.Name is not 'go-simplecli.test'")
@@ -146,8 +146,8 @@ func TestNormalizeEnvName(t *testing.T) {
 func TestViperConfigPath(t *testing.T) {
 	// cli := NewCLI()
 
-	t.Log("$HOME ", os.Getenv("HOME"))
-	t.Log("$USERPROFILE ", os.Getenv("USERPROFILE"))
+	t.Log("HOME:", os.Getenv("HOME"))
+	t.Log("USERPROFILE:", os.Getenv("USERPROFILE"))
 }
 
 func TestMain(m *testing.M) {

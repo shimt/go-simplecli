@@ -237,8 +237,10 @@ func (c *CLI) Exit1IfError(err error) {
 }
 
 // BindSameName - Bind viper & pflag parameter.
-func (c *CLI) BindSameName(name string) {
-	c.Config.BindPFlag(name, c.CommandLine.Lookup(name))
+func (c *CLI) BindSameName(names ...string) {
+	for _, name := range names {
+		c.Config.BindPFlag(name, c.CommandLine.Lookup(name))
+	}
 }
 
 // NewCLI - New CLI instance.

@@ -47,6 +47,7 @@ type application struct {
 	Arch string
 }
 
+// CLI - CLI main structure
 type CLI struct {
 	Application application
 

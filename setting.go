@@ -23,6 +23,7 @@
 // Package simplecli is simple CLI framework.
 package simplecli
 
+// CLISetting - CLI Setting Structure
 type CLISetting struct {
 	cli *CLI
 }

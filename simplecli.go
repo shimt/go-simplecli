@@ -32,6 +32,7 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/pkg/errors"
+	"github.com/pkg/profile"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -61,6 +62,11 @@ type CLI struct {
 
 	DebugMode   bool
 	VerboseMode bool
+	ProfileMode string
+
+	profiler interface {
+		Stop()
+	}
 }
 
 // Initialize - initalize CLI struct.
@@ -172,10 +178,19 @@ func (c *CLI) initPFlag() (err error) {
 	commandLine.StringVar(&c.ConfigFile, "config", "", "config file")
 	commandLine.BoolVar(&c.DebugMode, "debug", false, "debug output")
 	commandLine.BoolVar(&c.VerboseMode, "verbose", false, "verbose output")
+	commandLine.StringVar(&c.ProfileMode, "profile", "", "profile mode (cpu/memory/mutex/block/trace)")
 
 	c.CommandLine = commandLine
 
 	return
+}
+
+var profileMap = map[string]func(*profile.Profile){
+	"cpu":    profile.CPUProfile,
+	"memory": profile.MemProfile,
+	"mutex":  profile.MutexProfile,
+	"block":  profile.BlockProfile,
+	"trace":  profile.TraceProfile,
 }
 
 // Setup - Parse command line & read configuration file.
@@ -215,6 +230,13 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 
 	c.setupLogus()
 
+	if c.ProfileMode != "" {
+		if _, ok := profileMap[c.ProfileMode]; !ok {
+			err = errors.Errorf("unknown profiler (%s)", c.ProfileMode)
+			return
+		}
+	}
+
 	return
 }
 
@@ -228,8 +250,24 @@ func (c *CLI) setupLogus() {
 	}
 }
 
+// StartProfile - Start profiling
+func (c *CLI) StartProfile() {
+	if pm, ok := profileMap[c.ProfileMode]; ok {
+		c.profiler = profile.Start(pm)
+	}
+}
+
+// StopProfile - Stop profiling
+func (c *CLI) StopProfile() {
+	if c.profiler != nil {
+		c.profiler.Stop()
+		c.profiler = nil
+	}
+}
+
 // Exit - Exit CLI application.
 func (c *CLI) Exit(code int) {
+	c.StopProfile()
 	os.Exit(code)
 }
 

@@ -234,11 +234,8 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 
 	c.setupLogus()
 
-	if c.ProfileMode != "" {
-		if _, ok := profileMap[c.ProfileMode]; !ok {
-			err = errors.Errorf("unknown profiler (%s)", c.ProfileMode)
-			return
-		}
+	if err = c.checkProfileMode(); err != nil {
+		return
 	}
 
 	return
@@ -252,6 +249,17 @@ func (c *CLI) setupLogus() {
 	if c.DebugMode {
 		c.Log.Level = logrus.DebugLevel
 	}
+}
+
+func (c *CLI) checkProfileMode() (err error) {
+	if c.ProfileMode != "" {
+		if _, ok := profileMap[c.ProfileMode]; !ok {
+			err = errors.Errorf("unknown profiler (%s)", c.ProfileMode)
+			return
+		}
+	}
+
+	return
 }
 
 // StartProfile - Start profiling
@@ -290,7 +298,6 @@ func (c *CLI) BindSameName(names ...string) (err error) {
 			err = errors.Wrap(e, "CLI.BindSameName")
 			return
 		}
-
 	}
 
 	return

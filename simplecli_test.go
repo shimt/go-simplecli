@@ -17,8 +17,8 @@ func TestApplicationName(t *testing.T) {
 	t.Log("os.Args[0]:", os.Args[0])
 	t.Log("cli.Application.Name:", cli.Application.Name)
 
-	if cli.Application.Name != "go-simplecli.test" {
-		t.Error("cli.Application.Name is not 'go-simplecli.test'")
+	if cli.Application.Name != "go-simplecli" {
+		t.Error("cli.Application.Name is not 'go-simplecli'")
 	}
 }
 

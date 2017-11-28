@@ -64,13 +64,15 @@ type CLI struct {
 	VerboseMode bool
 	ProfileMode string
 
+	InitializeError error
+
 	profiler interface {
 		Stop()
 	}
 }
 
-// Initialize - initalize CLI struct.
-func (c *CLI) Initialize() {
+// Initialize - initialize CLI struct.
+func (c *CLI) Initialize() (err error) {
 	arg0 := os.Args[0]
 
 	// DebugMode & VerboseMode
@@ -80,7 +82,10 @@ func (c *CLI) Initialize() {
 
 	// logrus
 
-	c.initLogrus()
+	if e := c.initLogrus(); e != nil {
+		err = errors.Wrap(e, "CLI.initLogrus")
+		return
+	}
 
 	// Aplication.Name
 
@@ -116,8 +121,16 @@ func (c *CLI) Initialize() {
 	c.ConfigSearchPath = configSearchPath
 
 	// pflag & viper
-	c.initPFlag()
-	c.initViper()
+
+	if e := c.initPFlag(); e != nil {
+		err = errors.Wrap(e, "CLI.initPFlag")
+		return
+	}
+
+	if e := c.initViper(); e != nil {
+		err = errors.Wrap(e, "CLI.initViper")
+		return
+	}
 
 	return
 }
@@ -199,10 +212,20 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 		f()
 	}
 
-	c.BindSameName("debug")
-	c.BindSameName("verbose")
+	if e := c.BindSameName("debug"); e != nil {
+		err = errors.Wrap(e, "CLI.BindSameName(\"debug\")")
+		return
+	}
 
-	c.CommandLine.Parse(c.Application.Arguments)
+	if e := c.BindSameName("verbose"); e != nil {
+		err = errors.Wrap(e, "CLI.BindSameName(\"debug\")")
+		return
+	}
+
+	if e := c.CommandLine.Parse(c.Application.Arguments); e != nil {
+		err = errors.Wrap(e, "CLI.CommandLine.Parse")
+		return
+	}
 
 	if c.ConfigFile != "" {
 		c.Config.SetConfigFile(c.ConfigFile)
@@ -280,10 +303,16 @@ func (c *CLI) Exit1IfError(err error) {
 }
 
 // BindSameName - Bind viper & pflag parameter.
-func (c *CLI) BindSameName(names ...string) {
+func (c *CLI) BindSameName(names ...string) (err error) {
 	for _, name := range names {
-		c.Config.BindPFlag(name, c.CommandLine.Lookup(name))
+		if e := c.Config.BindPFlag(name, c.CommandLine.Lookup(name)); e != nil {
+			err = errors.Wrap(e, "CLI.BindSameName")
+			return
+		}
+
 	}
+
+	return
 }
 
 // NewCLISetting - New CLISetting instance.
@@ -294,7 +323,7 @@ func (c *CLI) NewCLISetting() CLISetting {
 // NewCLI - New CLI instance.
 func NewCLI() (cli *CLI) {
 	cli = &CLI{}
-	cli.Initialize()
+	cli.InitializeError = cli.Initialize()
 
 	return
 }

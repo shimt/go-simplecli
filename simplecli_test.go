@@ -88,7 +88,7 @@ func TestAConfigSearchPath(t *testing.T) {
 		if csp[i] != value {
 			t.Errorf("cli.ConfigSearchPath[%d] is not '%s'", i, value)
 		}
-		i++
+		// i++
 	}
 }
 

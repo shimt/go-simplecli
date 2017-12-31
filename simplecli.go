@@ -6,14 +6,16 @@ package simplecli
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/pkg/errors"
 	"github.com/pkg/profile"
+	"github.com/shimt/go-logif"
+	"github.com/shimt/go-logif/gologif"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
@@ -39,7 +41,7 @@ type CLI struct {
 	ConfigFile       string
 	Config           *viper.Viper
 
-	Log *logrus.Logger
+	Log logif.Logger
 
 	DebugMode   bool
 	VerboseMode bool
@@ -61,7 +63,7 @@ func (c *CLI) Initialize() (err error) {
 	c.DebugMode = false
 	c.VerboseMode = false
 
-	// logrus
+	// Logger
 
 	if e := c.initLogrus(); e != nil {
 		err = errors.Wrap(e, "CLI.initLogrus")
@@ -117,13 +119,7 @@ func (c *CLI) Initialize() (err error) {
 }
 
 func (c *CLI) initLogrus() (err error) {
-	log := logrus.New()
-
-	log.Formatter = &logrus.TextFormatter{}
-	log.Out = os.Stderr
-	log.Level = logrus.WarnLevel
-
-	c.Log = log
+	c.Log = gologif.New(os.Stderr, "", log.LstdFlags)
 
 	return
 }
@@ -243,11 +239,11 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 
 func (c *CLI) setupLogus() {
 	if c.VerboseMode {
-		c.Log.Level = logrus.InfoLevel
+		c.Log.SetOutputLevel(logif.INFO)
 	}
 
 	if c.DebugMode {
-		c.Log.Level = logrus.DebugLevel
+		c.Log.SetOutputLevel(logif.DEBUG)
 	}
 }
 

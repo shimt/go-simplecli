@@ -228,7 +228,7 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 		c.Log.Info("configuration file not found")
 	}
 
-	c.setupLogus()
+	c.setupLogger()
 
 	if err = c.checkProfileMode(); err != nil {
 		return
@@ -237,7 +237,7 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 	return
 }
 
-func (c *CLI) setupLogus() {
+func (c *CLI) setupLogger() {
 	if m, ok := c.Log.(logif.LeveledLoggerModifier); ok {
 		if c.VerboseMode {
 			m.SetOutputLevel(logif.INFO)

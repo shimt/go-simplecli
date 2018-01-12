@@ -65,7 +65,7 @@ func (c *CLI) Initialize() (err error) {
 
 	// Logger
 
-	if e := c.initLogrus(); e != nil {
+	if e := c.initLogger(); e != nil {
 		err = errors.Wrap(e, "CLI.initLogrus")
 		return
 	}
@@ -118,7 +118,7 @@ func (c *CLI) Initialize() (err error) {
 	return
 }
 
-func (c *CLI) initLogrus() (err error) {
+func (c *CLI) initLogger() (err error) {
 	c.Log = gologif.New(os.Stderr, "", log.LstdFlags)
 
 	return
@@ -238,12 +238,14 @@ func (c *CLI) Setup(setups ...func()) (err error) {
 }
 
 func (c *CLI) setupLogus() {
-	if c.VerboseMode {
-		c.Log.SetOutputLevel(logif.INFO)
-	}
+	if m, ok := c.Log.(logif.LeveledLoggerModifier); ok {
+		if c.VerboseMode {
+			m.SetOutputLevel(logif.INFO)
+		}
 
-	if c.DebugMode {
-		c.Log.SetOutputLevel(logif.DEBUG)
+		if c.DebugMode {
+			m.SetOutputLevel(logif.DEBUG)
+		}
 	}
 }
 

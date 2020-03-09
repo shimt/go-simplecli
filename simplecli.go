@@ -41,7 +41,7 @@ type CLI struct {
 	ConfigFile       string
 	Config           *viper.Viper
 
-	Log logif.Logger
+	Log logif.LeveledLogger
 
 	DebugMode   bool
 	VerboseMode bool

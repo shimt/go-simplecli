@@ -1,5 +1,7 @@
 module github.com/shimt/go-simplecli
 
+go 1.14
+
 require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect

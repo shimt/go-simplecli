@@ -70,7 +70,7 @@ func (c *CLI) Initialize() (err error) {
 		return
 	}
 
-	// Aplication.Name
+	// Application.Name
 
 	name := filepath.Base(arg0)
 	ext := filepath.Ext(name)

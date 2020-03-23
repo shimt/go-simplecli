@@ -1,6 +1,6 @@
-# File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 
-# Created by https://www.gitignore.io/api/linux,visualstudiocode,go
+# Created by https://www.gitignore.io/api/go,linux,windows
+# Edit at https://www.gitignore.io/?templates=go,linux,windows
 
 ### Go ###
 # Binaries for programs and plugins
@@ -10,11 +10,14 @@
 *.so
 *.dylib
 
-# Test binary, build with `go test -c`
+# Test binary, built with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
 
 ### Go Patch ###
 /vendor/
@@ -35,16 +38,30 @@
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
 
+# Dump file
+*.stackdump
 
-# End of https://www.gitignore.io/api/linux,visualstudiocode,go
+# Folder config file
+[Dd]esktop.ini
 
-# Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
 
-.envrc
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.gitignore.io/api/go,linux,windows

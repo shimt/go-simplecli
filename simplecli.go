@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// Package simplecli
 package simplecli
 
 import (
@@ -312,7 +313,4 @@ func NewCLI() (cli *CLI) {
 	cli.InitializeError = cli.Initialize()
 
 	return
-}
-
-func init() {
 }
